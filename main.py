@@ -107,8 +107,10 @@ def gpa (message):
 @bot.message_handler(commands=['quote'])
 def get_qoute(message):
     response = requests.get("https://zenquotes.io/api/random")
-    data = response.json()
-    qoute = data[0]['q']
-    bot.send_message(message.chat.id,f"Your Qoute of the Day:\n\"{qoute}\"")
-
+    if response.status_code == 200:
+        data = response.json()
+        qoute = data[0]['q']
+        bot.send_message(message.chat.id,f"Your Qoute of the Day:\n\"{qoute}\"")
+    else:
+        bot.send_message(message.chat.id,"Sorry, I couldn't get a quote right now.")
 bot.polling()
